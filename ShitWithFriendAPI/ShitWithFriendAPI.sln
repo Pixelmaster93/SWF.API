@@ -5,6 +5,8 @@ VisualStudioVersion = 17.13.35828.75 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShitWithFriendAPI", "ShitWithFriendAPI.csproj", "{68CD3C50-4FFA-4A42-BE0B-258CDA0A9069}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "swf.common", "..\swf.common\swf.common.csproj", "{420C21CA-AD38-4171-A8A6-6863B8C457BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{68CD3C50-4FFA-4A42-BE0B-258CDA0A9069}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68CD3C50-4FFA-4A42-BE0B-258CDA0A9069}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68CD3C50-4FFA-4A42-BE0B-258CDA0A9069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{420C21CA-AD38-4171-A8A6-6863B8C457BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{420C21CA-AD38-4171-A8A6-6863B8C457BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{420C21CA-AD38-4171-A8A6-6863B8C457BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{420C21CA-AD38-4171-A8A6-6863B8C457BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
