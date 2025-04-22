@@ -20,5 +20,9 @@ namespace ShitWithFriendAPI.Entities
         public Guid MouthPoopKing { get; set; }
 
         public ICollection<User> Users { get; set; }
+
+        public ICollection<User> Administrators { get; set; }
+        public ICollection<UserGroupEmoji> UserGroupEmojis { get; set; }
+
     }
 }

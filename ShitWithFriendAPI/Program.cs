@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Serilog;
+using ShitWithFriendAPI.DBContext;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Warning()
@@ -17,7 +19,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddDbContext<SWFContext>(DbContextOptions => 
+DbContextOptions.UseSqlite(builder.Configuration.GetConnectionString("SWFDbConnectionString")));
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

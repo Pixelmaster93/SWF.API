@@ -14,6 +14,6 @@ namespace ShitWithFriendAPI.Entities
         public ICollection<Group> Groups { get; set; }
         public ICollection<Poop> Poops { get; set; }
         public ICollection<HighScore> Highscores { get; set; }
-
+        public ICollection<UserGroupEmoji> UserGroupEmojis { get; set; }
     }
 }

@@ -19,6 +19,5 @@ namespace ShitWithFriendAPI.Entities
         [Required]
         public DateTime Date { get; set; }
     }
-
 }
 
