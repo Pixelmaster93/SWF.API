@@ -16,7 +16,7 @@ namespace ShitWithFriendAPI.Entities
         public Guid YearPoopKing { get; set; }
 
         [ForeignKey(nameof(MouthPoopKing))]
-        public User MouthPoopKingUser { get; set; }
+        public User MonthPoopKingUser { get; set; }
         public Guid MouthPoopKing { get; set; }
 
         public ICollection<User> Users { get; set; }

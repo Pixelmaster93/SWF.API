@@ -33,7 +33,7 @@ namespace ShitWithFriendAPI.DBContext
 
             // Relazione uno-a-uno con MouthPoopKingUser
             modelBuilder.Entity<Group>()
-                .HasOne(g => g.MouthPoopKingUser)
+                .HasOne(g => g.MonthPoopKingUser)
                 .WithMany()
                 .HasForeignKey(g => g.MouthPoopKing)
                 .OnDelete(DeleteBehavior.Restrict);

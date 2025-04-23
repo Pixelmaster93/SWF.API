@@ -11,8 +11,8 @@ using ShitWithFriendAPI.DBContext;
 namespace ShitWithFriendAPI.Migrations
 {
     [DbContext(typeof(SWFContext))]
-    [Migration("20250422213215_InitDb")]
-    partial class InitDb
+    [Migration("20250423092751_dbinit")]
+    partial class dbinit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -219,7 +219,7 @@ namespace ShitWithFriendAPI.Migrations
 
             modelBuilder.Entity("ShitWithFriendAPI.Entities.Group", b =>
                 {
-                    b.HasOne("ShitWithFriendAPI.Entities.User", "MouthPoopKingUser")
+                    b.HasOne("ShitWithFriendAPI.Entities.User", "MonthPoopKingUser")
                         .WithMany()
                         .HasForeignKey("MouthPoopKing")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -231,7 +231,7 @@ namespace ShitWithFriendAPI.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("MouthPoopKingUser");
+                    b.Navigation("MonthPoopKingUser");
 
                     b.Navigation("YearPoopKingUser");
                 });

@@ -216,7 +216,7 @@ namespace ShitWithFriendAPI.Migrations
 
             modelBuilder.Entity("ShitWithFriendAPI.Entities.Group", b =>
                 {
-                    b.HasOne("ShitWithFriendAPI.Entities.User", "MouthPoopKingUser")
+                    b.HasOne("ShitWithFriendAPI.Entities.User", "MonthPoopKingUser")
                         .WithMany()
                         .HasForeignKey("MouthPoopKing")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -228,7 +228,7 @@ namespace ShitWithFriendAPI.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("MouthPoopKingUser");
+                    b.Navigation("MonthPoopKingUser");
 
                     b.Navigation("YearPoopKingUser");
                 });
