@@ -1,6 +1,8 @@
-﻿namespace ShitWithFriendAPI.Repositories.Int
+﻿using ShitWithFriendAPI.Entities;
+
+namespace ShitWithFriendAPI.Repositories.Int
 {
-    public interface IGameRepository
+    public interface IGameRepository : IBaseRepository<Game>
     {
     }
 }
