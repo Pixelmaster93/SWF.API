@@ -7,6 +7,8 @@ namespace ShitWithFriendAPI.Entities
     {
         [Key]
         public Guid Id { get; set; }
+        public string Password { get; set; }
+
         [Required, MaxLength(25)]
         public string Name { get; set; }
         public User User { get; set; }

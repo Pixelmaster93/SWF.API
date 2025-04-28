@@ -8,7 +8,7 @@ namespace ShitWithFriendAPI.Entities
         [Key]
         public Guid Id { get; set; } = new Guid();
         [Required, MaxLength(15), NotNull]
-        public string Name { get; set; }
+        public string Username { get; set; }
         [Required, MaxLength(45), NotNull]
         public string Password { get; set; }
         public ICollection<Group> Groups { get; set; }
