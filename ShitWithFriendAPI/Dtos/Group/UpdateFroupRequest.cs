@@ -8,6 +8,6 @@ namespace ShitWithFriendAPI.Dtos.Group
         public string Password { get; set; }
         public ICollection<Guid> Users { get; set; }
         public ICollection<Guid> Administrators { get; set; }
-        public ICollection<UserGroupEmoji> UserGroupEmojis { get; set; }
+        public ICollection<Guid> UserGroupEmojis { get; set; }
     }
 }

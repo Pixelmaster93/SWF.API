@@ -1,4 +1,6 @@
-﻿namespace ShitWithFriendAPI.Dtos.User
+﻿using ShitWithFriendAPI.Dtos.Group;
+
+namespace ShitWithFriendAPI.Dtos.User
 {
     public class UserDto
     {
