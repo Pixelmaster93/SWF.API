@@ -1,6 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using ShitWithFriendAPI.DBContext;
+using ShitWithFriendAPI.Repositories.Int;
+using ShitWithFriendAPI.Repositories.Impl;
+using ShitWithFriendAPI.Services.Int;
+using ShitWithFriendAPI.Services.Impl;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Warning()
@@ -21,6 +25,20 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddDbContext<SWFContext>(DbContextOptions => 
 DbContextOptions.UseSqlite(builder.Configuration.GetConnectionString("SWFDbConnectionString")));
+
+// Repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPoopRepository, PoopRepository>();
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
+builder.Services.AddScoped<IGameRepository, GameRepository>();
+builder.Services.AddScoped<IHighScoreRepository, HighScoreRepository>();
+
+// Services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IPoopService, PoopService>();
+builder.Services.AddScoped<IGroupService, GroupService>();
+builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IHighScoreService, HighScoreService>();
 
 var app = builder.Build();
 
