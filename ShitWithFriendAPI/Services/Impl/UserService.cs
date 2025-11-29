@@ -62,5 +62,25 @@ namespace ShitWithFriendAPI.Services.Impl
             _userRepository.SaveChanges();
             return _mapper.Map<UserDto>(user);
         }
+
+        public async Task SyncUser(Guid id, string username)
+        {
+            var user = _userRepository.GetById(id).FirstOrDefault();
+            if (user == null)
+            {
+                user = new User
+                {
+                    Id = id,
+                    Username = username
+                };
+                _userRepository.Add(user);
+                _userRepository.SaveChanges();
+            }
+            else if (user.Username != username)
+            {
+                user.Username = username;
+                _userRepository.SaveChanges();
+            }
+        }
     }
 }

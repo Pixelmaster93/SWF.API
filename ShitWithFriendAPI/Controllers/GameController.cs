@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using ShitWithFriendAPI.Dtos.Game;
 using ShitWithFriendAPI.Services.Int;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShitWithFriendAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class GameController : ControllerBase

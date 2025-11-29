@@ -11,5 +11,6 @@ namespace ShitWithFriendAPI.Services.Int
         UserDto UpdateUser(Guid id, UpdateUserRequestDto updateUserRequestDto);
         void DeleteUser(Guid id);
         UserDto GetUserByUsername(string username);
+        Task SyncUser(Guid id, string username);
     }
 }
