@@ -1,0 +1,32 @@
+name: Deploy to aaPanel
+
+on:
+  push:
+    branches:
+      - develop  # L'azione parte solo quando pushi su questo branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy via SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        port: 22
+        script: |
+          # Entra nella cartella
+          cd /www/wwwroot/swf-api
+          
+          # Scarica le ultime modifiche
+          git pull origin develop
+          
+          # Ricostruisci e Riavvia i container
+          # Docker è intelligente: se non hai toccato il Dockerfile, ci mette pochissimo
+          docker compose up -d --build
+          
+          # Pulizia immagini vecchie (per risparmiare spazio)
+          docker image prune -f
