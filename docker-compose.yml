@@ -1,0 +1,36 @@
+services:
+  swf-api:
+    container_name: swf-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ConnectionStrings__SWFDbConnectionString=Data Source=/app/data/swf_database.db
+
+      # --- MODIFICA FONDAMENTALE ---
+      # Usiamo HTTP interno (veloce) e il nome esatto del container Keycloak
+      - Authentication__Authority=http://keycloak-keycloak-1:8080/realms/ShitWithFriend
+      - Authentication__Audience=account
+
+      # Sicurezza: Accettiamo il certificato anche se non usiamo HTTPS internamente
+      - ASPNETCORE_Kestrel__Certificates__Default__AllowInvalid=true
+
+      # Log di debug per vedere se tutto funziona
+      - Logging__LogLevel__Microsoft.AspNetCore.Authentication=Debug
+
+    ports:
+      - "5000:8080"
+    volumes:
+      - ./swf_data:/app/data
+    restart: always
+
+    # Colleghiamo l'API alla rete condivisa
+    networks:
+      - swf-net
+
+# Definiamo la rete come "esterna" (perché l'hai creata tu a mano prima)
+networks:
+  swf-net:
+    external: true

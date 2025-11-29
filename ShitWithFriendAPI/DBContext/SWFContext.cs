@@ -31,11 +31,11 @@ namespace ShitWithFriendAPI.DBContext
                 .HasForeignKey(g => g.YearPoopKing)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Relazione uno-a-uno con MouthPoopKingUser
+            // Relazione uno-a-uno con MonthPoopKingUser
             modelBuilder.Entity<Group>()
                 .HasOne(g => g.MonthPoopKingUser)
                 .WithMany()
-                .HasForeignKey(g => g.MouthPoopKing)
+                .HasForeignKey(g => g.MonthPoopKing)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Relazione molti-a-molti tra Group e Users

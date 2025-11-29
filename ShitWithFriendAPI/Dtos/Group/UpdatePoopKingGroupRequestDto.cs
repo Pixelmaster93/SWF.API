@@ -3,6 +3,6 @@
     public class UpdatePoopKingGroupRequestDto
     {
         public Guid YearPoopKing { get; set; }
-        public Guid MouthPoopKing { get; set; }
+        public Guid MonthPoopKing { get; set; }
     }
 }

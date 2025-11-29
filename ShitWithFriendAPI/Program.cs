@@ -56,9 +56,23 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
+    // 1. DOVE scaricare le chiavi (Useremo l'indirizzo interno HTTP)
     options.Authority = builder.Configuration["Authentication:Authority"];
     options.Audience = builder.Configuration["Authentication:Audience"];
-    options.RequireHttpsMetadata = false; // Set to true in production
+    
+    // Disabilita HTTPS per la connessione interna tra container
+    options.RequireHttpsMetadata = false;
+
+    // 2. CHI deve aver firmato il token (L'indirizzo pubblico HTTPS)
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        // Qui forziamo l'API ad accettare l'emittente pubblico anche se ci connettiamo internamente
+        ValidIssuer = "https://auth.dinonerd.it/realms/ShitWithFriend",
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true
+    };
 });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -83,13 +97,13 @@ var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseMiddleware<UserSyncMiddleware>();

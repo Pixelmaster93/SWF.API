@@ -25,7 +25,13 @@ namespace ShitWithFriendAPI.Profiles
             CreateMap<User, UserUsernameDto>();
             CreateMap<UserGroupEmoji, UserGroupEmojiDto>()
                 .ForMember(dest => dest.Group, opt => opt.MapFrom(src => src.Group.Name));
-            CreateMap<Group, GroupDto>();
+            // --- MODIFICA QUESTA PARTE ---
+            CreateMap<Group, GroupDto>()
+                // Mappa YearPoopKing (DTO) prendendo l'oggetto YearPoopKingUser (Entity)
+                .ForMember(dest => dest.YearPoopKing, opt => opt.MapFrom(src => src.YearPoopKingUser))
+                // Mappa MonthPoopKing (DTO) prendendo l'oggetto MonthPoopKingUser (Entity)
+                .ForMember(dest => dest.MonthPoopKing, opt => opt.MapFrom(src => src.MonthPoopKingUser));
+            // ----------------
             CreateMap<CreateGroupRequestDto, Group>();
             CreateMap<UpdateFroupRequest, Group>();
 
