@@ -3,6 +3,7 @@ using ShitWithFriendAPI.Dtos.User;
 using ShitWithFriendAPI.Entities;
 using ShitWithFriendAPI.Repositories.Int;
 using ShitWithFriendAPI.Services.Int;
+using Microsoft.EntityFrameworkCore;
 
 namespace ShitWithFriendAPI.Services.Impl
 {
@@ -65,7 +66,7 @@ namespace ShitWithFriendAPI.Services.Impl
 
         public async Task SyncUser(Guid id, string username)
         {
-            var user = _userRepository.GetById(id).FirstOrDefault();
+            var user = await _userRepository.GetById(id).FirstOrDefaultAsync();
             if (user == null)
             {
                 user = new User
