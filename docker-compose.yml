@@ -12,7 +12,7 @@ services:
       # --- MODIFICA FONDAMENTALE ---
       # Usiamo HTTP interno (veloce) e il nome esatto del container Keycloak
       - Authentication__Authority=http://keycloak-keycloak-1:8080/realms/ShitWithFriend
-      - Authentication__Audience=account
+      - Authentication__Audience=swf-api
 
       # Sicurezza: Accettiamo il certificato anche se non usiamo HTTPS internamente
       - ASPNETCORE_Kestrel__Certificates__Default__AllowInvalid=true
