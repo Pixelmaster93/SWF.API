@@ -124,4 +124,27 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// --- AUTO-MIGRAZIONE DATABASE (Inserire prima di app.Run()) ---
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        // Ottiene il contesto del database
+        var context = services.GetRequiredService<SWFContext>();
+        
+        // Applica le migrazioni pendenti (e crea il DB se non esiste)
+        // Questo risolve l'errore "no such column" aggiornando lo schema
+        context.Database.Migrate();
+        
+        Log.Information("Migrazione database completata con successo.");
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Errore critico durante la migrazione del database.");
+    }
+}
+// -------------------------------------------------------------
+
 app.Run();
