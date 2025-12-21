@@ -9,20 +9,41 @@ namespace ShitWithFriendAPI.Services.Impl
     public class PoopService : IPoopService
     {
         private readonly IPoopRepository _poopRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public PoopService(IPoopRepository poopRepository, IMapper mapper)
+        public PoopService(IPoopRepository poopRepository, IUserRepository userRepository, IMapper mapper)
         {
             _poopRepository = poopRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
         public PoopDto CreatePoop(CreatePoopRequestDto createPoopRequestDto)
         {
-            var poop = _mapper.Map<Poop>(createPoopRequestDto);
-            var createdPoop = _poopRepository.Add(poop);
+            var poop = new Poop
+            {
+                Id = Guid.NewGuid(),
+                UserId = createPoopRequestDto.UserId,
+                // FIX DATA: Assicurati che passi la data!
+                DateTime = createPoopRequestDto.DateTime == default ? DateTime.UtcNow : createPoopRequestDto.DateTime,
+                TypeOfPoop = createPoopRequestDto.TypeOfPoop
+            };
+
+            _poopRepository.Add(poop);
             _poopRepository.SaveChanges();
-            return _mapper.Map<PoopDto>(createdPoop);
+
+            // Recuperiamo lo username per la risposta
+            var user = _userRepository.GetById(createPoopRequestDto.UserId).FirstOrDefault();
+
+            return new PoopDto 
+            { 
+                Id = poop.Id, 
+                UserId = poop.UserId, 
+                Username = user?.Username ?? "Unknown", // <--- FIX USERNAME
+                DateTime = poop.DateTime, 
+                TypeOfPoop = poop.TypeOfPoop 
+            };
         }
 
         public void DeletePoop(Guid id)
