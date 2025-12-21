@@ -132,12 +132,9 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<SWFContext>();
         
-        // RIMUOVI: context.Database.Migrate();
-        // INSERISCI:
-        context.Database.EnsureDeleted(); // Tabula rasa
-        context.Database.EnsureCreated(); // Ricrea tutto allineato al codice
+        context.Database.Migrate();
         
-        Log.Information("Database ricreato da zero con successo.");
+        Log.Information("Database migrato con successo.");
     }
     catch (Exception ex)
     {
