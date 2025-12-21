@@ -1,11 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace ShitWithFriendAPI.Entities
 {
     public class User : IBaseEntity
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid Id { get; set; } = new Guid();
         [Required, MaxLength(15), NotNull]
         public string Username { get; set; }

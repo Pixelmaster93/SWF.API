@@ -42,6 +42,14 @@ namespace ShitWithFriendAPI.Controllers
         [HttpPost]
         public ActionResult<PoopDto> CreatePoop([FromBody] CreatePoopRequestDto createPoopRequestDto)
         {
+            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                               ?? User.FindFirst("sub")?.Value;
+
+            if (string.IsNullOrEmpty(userIdString)) return Unauthorized();
+
+            // Sovrascrivi l'ID con quello certificato del token
+            createPoopRequestDto.UserId = Guid.Parse(userIdString);
+
             var poop = _poopService.CreatePoop(createPoopRequestDto);
             return CreatedAtAction(nameof(GetPoopById), new { id = poop.Id }, poop);
         }

@@ -19,27 +19,28 @@ namespace ShitWithFriendAPI.Middleware
         {
             if (context.User.Identity != null && context.User.Identity.IsAuthenticated)
             {
-                var userIdClaim = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                                  ?? context.User.FindFirst("sub")?.Value;
+                // 1. Estrai l'UUID sicuro dal Token (Keycloak 'sub')
+                var userIdString = context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                                   ?? context.User.FindFirst("sub")?.Value;
 
+                // 2. Estrai username per info (ma comanda l'ID)
                 var username = context.User.FindFirst("preferred_username")?.Value
-                               ?? context.User.Identity.Name
-                               ?? "Unknown Pooper";
+                               ?? context.User.Identity.Name ?? "Unknown";
 
-                if (Guid.TryParse(userIdClaim, out var userId))
+                if (Guid.TryParse(userIdString, out var userId))
                 {
-                    // Creiamo uno scope dedicato per il DB per evitare conflitti con la richiesta principale
                     using (var scope = _scopeFactory.CreateScope())
                     {
                         var dbContext = scope.ServiceProvider.GetRequiredService<SWFContext>();
 
+                        // 3. Cerchiamo l'utente per ID (non per username!)
                         var user = await dbContext.Users.FindAsync(userId);
                         if (user == null)
                         {
-                            // L'utente non esiste, creiamolo!
+                            // CREATE: Usiamo l'ID di Keycloak
                             user = new User
                             {
-                                Id = userId,
+                                Id = userId, // <--- FORZATURA ID
                                 Username = username
                             };
                             dbContext.Users.Add(user);
@@ -47,14 +48,13 @@ namespace ShitWithFriendAPI.Middleware
                         }
                         else if (user.Username != username)
                         {
-                            // Aggiorniamo il nickname se è cambiato
+                            // UPDATE: Se ha cambiato nome su Keycloak, aggiorniamo il DB locale
                             user.Username = username;
                             await dbContext.SaveChangesAsync();
                         }
                     }
                 }
             }
-            // Passa la palla al prossimo step (il Controller)
             await _next(context);
         }
     }
