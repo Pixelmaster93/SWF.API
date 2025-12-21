@@ -9,17 +9,30 @@ namespace ShitWithFriendAPI.Services.Impl
     public class GroupService : IGroupService
     {
         private readonly IGroupRepository _groupRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public GroupService(IGroupRepository groupRepository, IMapper mapper)
+        public GroupService(IGroupRepository groupRepository, IUserRepository userRepository, IMapper mapper)
         {
             _groupRepository = groupRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
-        public GroupDto CreateGroup(CreateGroupRequestDto createGroupRequestDto)
+        public GroupDto CreateGroup(CreateGroupRequestDto createGroupRequestDto, Guid? creatorUserId = null)
         {
             var group = _mapper.Map<Group>(createGroupRequestDto);
+            
+            if (creatorUserId.HasValue)
+            {
+                var creator = _userRepository.GetById(creatorUserId.Value).FirstOrDefault();
+                if (creator != null)
+                {
+                    group.Users = new List<User> { creator };
+                    group.Administrators = new List<User> { creator };
+                }
+            }
+
             var createdGroup = _groupRepository.Add(group);
             _groupRepository.SaveChanges();
             return _mapper.Map<GroupDto>(createdGroup);
@@ -47,9 +60,16 @@ namespace ShitWithFriendAPI.Services.Impl
             return _mapper.Map<GroupDto>(group);
         }
 
-        public IQueryable<GroupDto> GetGroups(int pageNumber, int pageSize)
+        public IQueryable<GroupDto> GetGroups(int pageNumber, int pageSize, Guid? userId = null)
         {
-            var groups = _groupRepository.GetGroups(pageNumber, pageSize);
+            var query = _groupRepository.GetAll();
+
+            if (userId.HasValue)
+            {
+                query = query.Where(g => g.Users.Any(u => u.Id == userId.Value));
+            }
+
+            var groups = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
             return _mapper.ProjectTo<GroupDto>(groups);
         }
 

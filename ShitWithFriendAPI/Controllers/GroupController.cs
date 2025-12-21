@@ -3,6 +3,8 @@ using ShitWithFriendAPI.Dtos.Group;
 using ShitWithFriendAPI.Services.Int;
 using Microsoft.AspNetCore.Authorization;
 
+using System.Security.Claims;
+
 namespace ShitWithFriendAPI.Controllers
 {
     [Authorize]
@@ -18,9 +20,9 @@ namespace ShitWithFriendAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<GroupDto>> GetGroups([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public ActionResult<IEnumerable<GroupDto>> GetGroups([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] Guid? userId = null)
         {
-            var groups = _groupService.GetGroups(pageNumber, pageSize);
+            var groups = _groupService.GetGroups(pageNumber, pageSize, userId);
             return Ok(groups);
         }
 
@@ -43,7 +45,14 @@ namespace ShitWithFriendAPI.Controllers
         [HttpPost]
         public ActionResult<GroupDto> CreateGroup([FromBody] CreateGroupRequestDto createGroupRequestDto)
         {
-            var group = _groupService.CreateGroup(createGroupRequestDto);
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            Guid? userId = null;
+            if (Guid.TryParse(userIdString, out var parsedId))
+            {
+                userId = parsedId;
+            }
+
+            var group = _groupService.CreateGroup(createGroupRequestDto, userId);
             return CreatedAtAction(nameof(GetGroupById), new { id = group.Id }, group);
         }
 
