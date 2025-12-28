@@ -107,24 +107,7 @@ builder.Services.AddScoped<IAchievementService, AchievementService>();
 
 var app = builder.Build();
 
-
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-//}
-
-//app.UseHttpsRedirection();
-
-app.UseCors("AllowAll");
-app.UseAuthentication();
-app.UseMiddleware<UserSyncMiddleware>();
-app.UseAuthorization();
-
-app.MapControllers();
-
-// --- MODIFICA RICHIESTA ---
+// --- AUTO-MIGRATION ON STARTUP ---
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -143,5 +126,24 @@ using (var scope = app.Services.CreateScope())
     }
 }
 // -------------------------------------------------------------
+
+
+// Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+//}
+
+//app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
+app.UseAuthentication();
+app.UseMiddleware<UserSyncMiddleware>();
+app.UseAuthorization();
+
+app.MapControllers();
+
+
 
 app.Run();
