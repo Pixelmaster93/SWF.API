@@ -94,6 +94,11 @@ namespace ShitWithFriendAPI.DBContext
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Achievement>().HasData(
+                // STARTER PACK (DEFAULT)
+                new Achievement { Code = "DEFAULT_1", Name = "Classica", Description = "L'originale.", IsSecret = false, XpValue = 0 },
+                new Achievement { Code = "DEFAULT_2", Name = "Il Signore", Description = "Distinta ed elegante.", IsSecret = false, XpValue = 0 },
+                new Achievement { Code = "DEFAULT_3", Name = "Love", Description = "Fatta con amore.", IsSecret = false, XpValue = 0 },
+
                 // QUANTITÀ
                 new Achievement { Code = "POOP_1", Name = "Il Primo Passo", Description = "La tua prima cacca registrata.", IsSecret = false, XpValue = 10 },
                 new Achievement { Code = "POOP_10", Name = "Riscaldamento", Description = "10 cacche registrate.", IsSecret = false, XpValue = 20 },

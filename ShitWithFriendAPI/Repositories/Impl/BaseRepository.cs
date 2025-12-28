@@ -10,7 +10,7 @@ namespace ShitWithFriendAPI.Repositories.Impl
     public class BaseRepository<T> : IBaseRepository<T> where T : class, IBaseEntity
     {
         public SWFContext _context { get; }
-        private DbSet<T> _dbSet;
+        protected DbSet<T> _dbSet;
 
         public BaseRepository(SWFContext context)
         {

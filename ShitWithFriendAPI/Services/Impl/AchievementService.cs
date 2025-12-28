@@ -31,7 +31,7 @@ namespace ShitWithFriendAPI.Services.Impl
         public async Task<List<Achievement>> CheckAchievements(Guid userId)
         {
             // 1. Recupera codici già sbloccati
-            var unlockedCodes = await _userAchievementRepository.GetUnlockedCodes(userId).ToListAsync();
+            var unlockedCodes = await _userAchievementRepository.GetUnlockedCodes(userId);
             var newUnlocks = new List<string>();
 
             // 2. Recupera dati utente

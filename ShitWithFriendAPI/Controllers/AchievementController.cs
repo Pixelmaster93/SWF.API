@@ -50,7 +50,7 @@ namespace ShitWithFriendAPI.Controllers
             }
 
             var achievements = await _achievementRepository.GetAll().ToListAsync();
-            var unlockedCodes = await _userAchievementRepository.GetUnlockedCodes(userId).ToListAsync();
+            var unlockedCodes = await _userAchievementRepository.GetUnlockedCodes(userId);
 
             var dtos = achievements.Select(a =>
             {
