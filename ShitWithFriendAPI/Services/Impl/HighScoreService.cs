@@ -10,11 +10,13 @@ namespace ShitWithFriendAPI.Services.Impl
     {
         private readonly IHighScoreRepository _highScoreRepository;
         private readonly IMapper _mapper;
+        private readonly IAchievementService _achievementService;
 
-        public HighScoreService(IHighScoreRepository highScoreRepository, IMapper mapper)
+        public HighScoreService(IHighScoreRepository highScoreRepository, IMapper mapper, IAchievementService achievementService)
         {
             _highScoreRepository = highScoreRepository;
             _mapper = mapper;
+            _achievementService = achievementService;
         }
 
         public HighScoreDto CreateHighScore(CreateHighScoreRequestDto createHighScoreRequestDto)
@@ -22,6 +24,10 @@ namespace ShitWithFriendAPI.Services.Impl
             var highScore = _mapper.Map<HighScore>(createHighScoreRequestDto);
             var createdHighScore = _highScoreRepository.Add(highScore);
             _highScoreRepository.SaveChanges();
+            
+            // Check Achievements
+            _ = Task.Run(() => _achievementService.CheckAchievements(highScore.UserId));
+
             return _mapper.Map<HighScoreDto>(createdHighScore);
         }
 

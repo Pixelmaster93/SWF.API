@@ -11,12 +11,14 @@ namespace ShitWithFriendAPI.Services.Impl
         private readonly IPoopRepository _poopRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IAchievementService _achievementService;
 
-        public PoopService(IPoopRepository poopRepository, IUserRepository userRepository, IMapper mapper)
+        public PoopService(IPoopRepository poopRepository, IUserRepository userRepository, IMapper mapper, IAchievementService achievementService)
         {
             _poopRepository = poopRepository;
             _userRepository = userRepository;
             _mapper = mapper;
+            _achievementService = achievementService;
         }
 
         public PoopDto CreatePoop(CreatePoopRequestDto createPoopRequestDto)
@@ -32,6 +34,9 @@ namespace ShitWithFriendAPI.Services.Impl
 
             _poopRepository.Add(poop);
             _poopRepository.SaveChanges();
+
+            // Check Achievements
+            _ = Task.Run(() => _achievementService.CheckAchievements(poop.UserId));
 
             // Recuperiamo lo username per la risposta
             var user = _userRepository.GetById(createPoopRequestDto.UserId).FirstOrDefault();

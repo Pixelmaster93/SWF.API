@@ -12,6 +12,8 @@ namespace ShitWithFriendAPI.Entities
         public Guid Id { get; set; } = new Guid();
         [Required, MaxLength(15), NotNull]
         public string Username { get; set; }
+        public string Email { get; set; }
+        public string Avatar { get; set; } = "POOP_1";
 
         public ICollection<Group> Groups { get; set; }
         public ICollection<Poop> Poops { get; set; }

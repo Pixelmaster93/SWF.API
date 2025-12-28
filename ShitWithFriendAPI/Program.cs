@@ -101,6 +101,8 @@ builder.Services.AddScoped<IPoopRepository, PoopRepository>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IHighScoreRepository, HighScoreRepository>();
+builder.Services.AddScoped<IAchievementRepository, AchievementRepository>();
+builder.Services.AddScoped<IUserAchievementRepository, UserAchievementRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -108,6 +110,7 @@ builder.Services.AddScoped<IPoopService, PoopService>();
 builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IHighScoreService, HighScoreService>();
+builder.Services.AddScoped<IAchievementService, AchievementService>();
 
 var app = builder.Build();
 
