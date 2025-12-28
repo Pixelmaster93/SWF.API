@@ -115,14 +115,25 @@ using (var scope = app.Services.CreateScope())
     {
         var context = services.GetRequiredService<SWFContext>();
         
+        // 1. Tenta la migrazione standard
         context.Database.Migrate();
         
-        Log.Information("Database migrato con successo.");
+        // 2. SAFETY CHECK: Se per qualche motivo EF ha saltato la colonna, prova ad aggiungerla a mano.
+        // Il catch vuoto serve a ignorare l'errore se la colonna esiste già (comportamento desiderato).
+        try 
+        { 
+            context.Database.ExecuteSqlRaw("ALTER TABLE Users ADD COLUMN Avatar TEXT DEFAULT 'DEFAULT_1'"); 
+            Log.Information("Colonna Avatar aggiunta manualmente (Fallback).");
+        } 
+        catch { /* La colonna esiste già, tutto ok */ }
+        
+        Log.Information("Database allineato con successo.");
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Errore critico durante la ricreazione del database.");
+        logger.LogError(ex, "ERRORE CRITICO MIGRAZIONE: L'applicazione verrà arrestata.");
+        throw; // Blocca l'avvio se il DB è rotto, così vediamo l'errore nel log di startup
     }
 }
 // -------------------------------------------------------------
