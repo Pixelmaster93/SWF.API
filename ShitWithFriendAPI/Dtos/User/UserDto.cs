@@ -6,6 +6,7 @@ namespace ShitWithFriendAPI.Dtos.User
     {
         public Guid Id { get; set; }
         public string Username { get; set; }
+        public string Avatar { get; set; }
         public ICollection<GroupDto> Groups { get; set; }
     }
 }

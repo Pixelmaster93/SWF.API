@@ -2,11 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShitWithFriendAPI.Dtos.Achievement;
 using ShitWithFriendAPI.Repositories.Int;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShitWithFriendAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AchievementController : ControllerBase
     {
         private readonly IAchievementRepository _achievementRepository;
@@ -37,7 +40,7 @@ namespace ShitWithFriendAPI.Controllers
             // Controllo codice UserController... Non posso vederlo ora.
             // Assumo Auth standard.
             
-            var userIdString = User.FindFirst("id")?.Value;
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!Guid.TryParse(userIdString, out var userId))
             {
                 // Fallback o Error? 
@@ -72,7 +75,7 @@ namespace ShitWithFriendAPI.Controllers
         [HttpGet("user/avatar")]
         public async Task<IActionResult> GetAvatar()
         {
-            var userIdString = User.FindFirst("id")?.Value;
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!Guid.TryParse(userIdString, out var userId)) return Unauthorized();
 
             var user = await _userRepository.GetById(userId).FirstOrDefaultAsync();
