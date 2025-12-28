@@ -22,17 +22,10 @@ builder.Host.UseSerilog();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        policy =>
-        {
-            policy.WithOrigins(
-                "http://localhost:5173", 
-                "https://shitwithfriends.dinonerd.it"
-            )
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials();
-        });
+    options.AddPolicy("AllowAll", builder =>
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
 });
 
 builder.Services.AddControllers();
