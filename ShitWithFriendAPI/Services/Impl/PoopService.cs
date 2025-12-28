@@ -35,20 +35,35 @@ namespace ShitWithFriendAPI.Services.Impl
             _poopRepository.Add(poop);
             _poopRepository.SaveChanges();
 
-            // Check Achievements
-            _ = Task.Run(() => _achievementService.CheckAchievements(poop.UserId));
+            // Check Achievements (Awaited for realtime result)
+            var newAchievements = Task.Run(() => _achievementService.CheckAchievements(poop.UserId)).Result;
 
             // Recuperiamo lo username per la risposta
             var user = _userRepository.GetById(createPoopRequestDto.UserId).FirstOrDefault();
 
-            return new PoopDto 
+            var poopDto = new PoopDto 
             { 
                 Id = poop.Id, 
                 UserId = poop.UserId, 
-                Username = user?.Username ?? "Unknown", // <--- FIX USERNAME
+                Username = user?.Username ?? "Unknown", 
                 DateTime = poop.DateTime, 
                 TypeOfPoop = poop.TypeOfPoop 
             };
+
+            if (newAchievements != null && newAchievements.Any())
+            {
+                poopDto.NewAchievements = newAchievements.Select(a => new ShitWithFriendAPI.Dtos.Achievement.AchievementDto
+                {
+                    Code = a.Code,
+                    Name = a.Name,
+                    Description = a.Description,
+                    IsSecret = a.IsSecret,
+                    XpValue = a.XpValue,
+                    IsUnlocked = true
+                }).ToList();
+            }
+
+            return poopDto;
         }
 
         public void DeletePoop(Guid id)

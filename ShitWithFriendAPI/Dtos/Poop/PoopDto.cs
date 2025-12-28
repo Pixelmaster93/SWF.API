@@ -1,4 +1,5 @@
 ﻿using ShitWithFriendAPI.Entities;
+using ShitWithFriendAPI.Dtos.Achievement;
 
 namespace ShitWithFriendAPI.Dtos.Poop
 {
@@ -9,5 +10,6 @@ namespace ShitWithFriendAPI.Dtos.Poop
         public string Username { get; set; }
         public DateTime DateTime { get; set; }
         public TypeOfPoop TypeOfPoop { get; set; }
+        public List<AchievementDto> NewAchievements { get; set; } = new();
     }
 }

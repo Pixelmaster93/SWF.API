@@ -4,6 +4,6 @@ namespace ShitWithFriendAPI.Services.Int
 {
     public interface IAchievementService
     {
-        Task CheckAchievements(Guid userId);
+        Task<List<Achievement>> CheckAchievements(Guid userId);
     }
 }

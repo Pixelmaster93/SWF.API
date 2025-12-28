@@ -28,7 +28,7 @@ namespace ShitWithFriendAPI.Services.Impl
             _achievementRepository = achievementRepository;
         }
 
-        public async Task CheckAchievements(Guid userId)
+        public async Task<List<Achievement>> CheckAchievements(Guid userId)
         {
             // 1. Recupera codici già sbloccati
             var unlockedCodes = await _userAchievementRepository.GetUnlockedCodes(userId).ToListAsync();
@@ -144,6 +144,8 @@ namespace ShitWithFriendAPI.Services.Impl
 
 
             // 3. Salva nuovi sblocchi
+            var newlyUnlockedAchievements = new List<Achievement>();
+            
             if (newUnlocks.Any())
             {
                 foreach (var code in newUnlocks)
@@ -156,7 +158,14 @@ namespace ShitWithFriendAPI.Services.Impl
                     });
                 }
                 _userAchievementRepository.SaveChanges();
+                
+                // Recupera le entità complete per il ritorno
+                newlyUnlockedAchievements = await _achievementRepository.GetAll()
+                    .Where(a => newUnlocks.Contains(a.Code))
+                    .ToListAsync();
             }
+            
+            return newlyUnlockedAchievements;
         }
     }
 }

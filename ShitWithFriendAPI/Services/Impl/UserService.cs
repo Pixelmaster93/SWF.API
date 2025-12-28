@@ -83,5 +83,15 @@ namespace ShitWithFriendAPI.Services.Impl
                 _userRepository.SaveChanges();
             }
         }
+
+        public void UpdateAvatar(Guid id, string avatarCode)
+        {
+            var user = _userRepository.GetById(id).FirstOrDefault();
+            if (user != null)
+            {
+                user.Avatar = avatarCode;
+                _userRepository.SaveChanges();
+            }
+        }
     }
 }
