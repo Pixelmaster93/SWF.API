@@ -11,8 +11,8 @@ using ShitWithFriendAPI.DBContext;
 namespace ShitWithFriendAPI.Migrations
 {
     [DbContext(typeof(SWFContext))]
-    [Migration("20251228122936_AddAvatarColumn")]
-    partial class AddAvatarColumn
+    [Migration("20251228123245_AddAvatarColumn_Fix")]
+    partial class AddAvatarColumn_Fix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShitWithFriendAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAvatarColumn : Migration
+    public partial class AddAvatarColumn_Fix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,7 +18,7 @@ namespace ShitWithFriendAPI.Migrations
                 table: "Users",
                 type: "TEXT",
                 nullable: false,
-                defaultValue: "");
+                defaultValue: "DEFAULT_1");
 
             migrationBuilder.AddColumn<string>(
                 name: "Email",
