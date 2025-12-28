@@ -1,4 +1,5 @@
 ﻿using ShitWithFriendAPI.DBContext;
+using Microsoft.EntityFrameworkCore;
 using ShitWithFriendAPI.Entities;
 using ShitWithFriendAPI.Repositories.Int;
 
@@ -15,5 +16,14 @@ namespace ShitWithFriendAPI.Repositories.Impl
 
         public IQueryable<Group> GetGroupByName(string name) =>
             FindAll(x => x.Name == name);
+
+        public Group GetGroupById(Guid id)
+        {
+            return _context.Groups
+                .Include(g => g.Users)
+                .Include(g => g.Administrators)
+                .Include(g => g.UserGroupEmojis)
+                .FirstOrDefault(g => g.Id == id);
+        }
     }
 }

@@ -50,7 +50,7 @@ namespace ShitWithFriendAPI.Services.Impl
 
         public GroupDto GetGroupById(Guid id)
         {
-            var group = _groupRepository.GetById(id).FirstOrDefault();
+            var group = _groupRepository.GetGroupById(id);
             return _mapper.Map<GroupDto>(group);
         }
 

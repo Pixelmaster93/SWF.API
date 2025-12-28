@@ -6,5 +6,6 @@ namespace ShitWithFriendAPI.Repositories.Int
     {
         public IQueryable<Group> GetGroups(int pageNumber, int pageSize);
         public IQueryable<Group> GetGroupByName(string name);
+        public Group GetGroupById(Guid id);
     }
 }
