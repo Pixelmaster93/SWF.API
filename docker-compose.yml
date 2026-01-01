@@ -1,4 +1,17 @@
 services:
+  swf-postgres:
+    image: postgres:15-alpine
+    container_name: swf-postgres
+    environment:
+      - POSTGRES_DB=ShitWithFriend
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=PasswordSegreta123!
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - swf-net
+    restart: always
+
   swf-api:
     container_name: swf-api
     build:
@@ -7,7 +20,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8080
-      - ConnectionStrings__SWFDbConnectionString=Data Source=/app/data/swf_database.db
+      - ConnectionStrings__SWFDbConnectionString=Host=swf-postgres;Port=5432;Database=ShitWithFriend;Username=admin;Password=PasswordSegreta123!
 
       # --- MODIFICA FONDAMENTALE ---
       # Usiamo HTTP interno (veloce) e il nome esatto del container Keycloak
@@ -25,6 +38,8 @@ services:
     volumes:
       - ./swf_data:/app/data
     restart: always
+    depends_on:
+      - swf-postgres
 
     # Colleghiamo l'API alla rete condivisa
     networks:
@@ -34,3 +49,6 @@ services:
 networks:
   swf-net:
     external: true
+
+volumes:
+  postgres_data:
