@@ -20,8 +20,9 @@ namespace ShitWithFriendAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<GroupDto>> GetGroups([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, [FromQuery] Guid? userId = null)
+        public ActionResult<IEnumerable<GroupDto>> GetGroups([FromQuery] int pageNumber = 0, [FromQuery] int pageSize = 10, [FromQuery] Guid? userId = null)
         {
+            if (pageNumber < 0) pageNumber = 0;
             var groups = _groupService.GetGroups(pageNumber, pageSize, userId);
             return Ok(groups);
         }

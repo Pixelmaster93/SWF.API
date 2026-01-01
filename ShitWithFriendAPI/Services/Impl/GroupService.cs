@@ -69,7 +69,7 @@ namespace ShitWithFriendAPI.Services.Impl
                 query = query.Where(g => g.Users.Any(u => u.Id == userId.Value));
             }
 
-            var groups = query.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            var groups = query.Skip(pageNumber * pageSize).Take(pageSize);
             return _mapper.ProjectTo<GroupDto>(groups);
         }
 
