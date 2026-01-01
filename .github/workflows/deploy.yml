@@ -1,4 +1,4 @@
-name: Build & Deploy via GHCR
+name: Build & Deploy Multi-Arch
 
 on:
   push:
@@ -20,6 +20,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 1. Installa QEMU (Emulatore per compilare ARM su Intel)
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # 2. Installa Docker Buildx (Potenziamento per build multi-arch)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
@@ -33,6 +41,8 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          # 3. QUI LA MAGIA: Diciamo di costruire per entrambe le architetture
+          platforms: linux/amd64,linux/arm64
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
   deploy:
@@ -47,17 +57,20 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
+            # Fix per l'errore git "dubious ownership" che hai visto prima
+            git config --global --add safe.directory /www/wwwroot/swf_api
+            
             cd /www/wwwroot/swf_api
             
-            # 1. Scarica la nuova definizione dei container
+            # Scarica le definizioni (anche se qui cambia poco nel docker-compose)
             git pull origin develop
             
-            # 2. Scarica la nuova immagine (pull)
-            # Nota: Ricordati di aver fatto 'docker login' sul server una volta
-            docker compose pull
+            # Scarica la nuova immagine ARM64
+            # IMPORTANTE: sudo è necessario se non hai configurato il gruppo docker
+            sudo docker compose pull
             
-            # 3. Aggiorna i container
-            docker compose up -d
+            # Riavvia tutto
+            sudo docker compose up -d
             
-            # 4. Pulisci le vecchie immagini
-            docker image prune -f
+            # Pulisci
+            sudo docker image prune -f
