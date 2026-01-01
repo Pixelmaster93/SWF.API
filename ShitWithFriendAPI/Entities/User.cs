@@ -12,7 +12,7 @@ namespace ShitWithFriendAPI.Entities
         public Guid Id { get; set; } = new Guid();
         [Required, NotNull]
         public string Username { get; set; }
-        public string Email { get; set; }
+        public string? Email { get; set; }
         public string Avatar { get; set; } = "DEFAULT_1";
 
         public ICollection<Group> Groups { get; set; }
