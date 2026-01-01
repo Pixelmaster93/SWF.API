@@ -61,7 +61,7 @@ namespace ShitWithFriendAPI.Controllers
                 return new AchievementDto
                 {
                     Code = a.Code,
-                    Name = (a.IsSecret && !isUnlocked) ? "???" : a.Name,
+                    Name = a.Name,
                     Description = (a.IsSecret && !isUnlocked) ? "???" : a.Description,
                     IsSecret = a.IsSecret,
                     XpValue = a.XpValue,
@@ -82,6 +82,49 @@ namespace ShitWithFriendAPI.Controllers
             if (user == null) return NotFound();
 
             return Ok(new { Avatar = user.Avatar });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAchievement([FromBody] CreateAchievementRequestDto dto)
+        {
+            if (await _achievementRepository.GetByCodeAsync(dto.Code) != null)
+            {
+                return Conflict(new { message = $"Achievement with code '{dto.Code}' already exists." });
+            }
+
+            var achievement = new ShitWithFriendAPI.Entities.Achievement
+            {
+                Code = dto.Code,
+                Name = dto.Name,
+                Description = dto.Description,
+                IsSecret = dto.IsSecret,
+                XpValue = dto.XpValue
+            };
+
+            await _achievementRepository.AddAsync(achievement);
+            await _achievementRepository.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetAll), new { }, dto);
+        }
+
+        [HttpPut("{code}")]
+        public async Task<IActionResult> UpdateAchievement(string code, [FromBody] UpdateAchievementRequestDto dto)
+        {
+            var achievement = await _achievementRepository.GetByCodeAsync(code);
+            if (achievement == null)
+            {
+                return NotFound(new { message = $"Achievement with code '{code}' not found." });
+            }
+
+            achievement.Name = dto.Name;
+            achievement.Description = dto.Description;
+            achievement.IsSecret = dto.IsSecret;
+            achievement.XpValue = dto.XpValue;
+
+            await _achievementRepository.UpdateAsync(achievement);
+            await _achievementRepository.SaveChangesAsync();
+
+            return Ok(dto);
         }
     }
 }
