@@ -30,8 +30,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./SWF.API
-          file: ./SWF.API/Dockerfile
+          context: .
+          file: ./Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
@@ -53,11 +53,11 @@ jobs:
             git pull origin develop
             
             # 2. Scarica la nuova immagine (pull)
-            # Nota: Se l'immagine è privata, assicurati di aver fatto 'docker login' sul server una volta
+            # Nota: Ricordati di aver fatto 'docker login' sul server una volta
             docker compose pull
             
             # 3. Aggiorna i container
             docker compose up -d
             
-            # 4. Pulisci le vecchie immagini per spazio
+            # 4. Pulisci le vecchie immagini
             docker image prune -f
