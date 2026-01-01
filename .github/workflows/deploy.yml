@@ -1,32 +1,63 @@
-name: Deploy to aaPanel
+name: Build & Deploy via GHCR
 
 on:
   push:
     branches:
-      - develop  # L'azione parte solo quando pushi su questo branch
+      - develop
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: pixelmaster93/swf.api
 
 jobs:
-  deploy:
+  build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
-    - name: Deploy via SSH
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_KEY }}
-        port: 22
-        script: |
-          # Entra nella cartella
-          cd /www/wwwroot/swf_api
-          
-          # Scarica le ultime modifiche
-          git pull origin develop
-          
-          # Ricostruisci e Riavvia i container
-          # Docker è intelligente: se non hai toccato il Dockerfile, ci mette pochissimo
-          docker compose up -d --build
-          
-          # Pulizia immagini vecchie (per risparmiare spazio)
-          docker image prune -f
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./SWF.API
+          file: ./SWF.API/Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
+          script: |
+            cd /www/wwwroot/swf_api
+            
+            # 1. Scarica la nuova definizione dei container
+            git pull origin develop
+            
+            # 2. Scarica la nuova immagine (pull)
+            # Nota: Se l'immagine è privata, assicurati di aver fatto 'docker login' sul server una volta
+            docker compose pull
+            
+            # 3. Aggiorna i container
+            docker compose up -d
+            
+            # 4. Pulisci le vecchie immagini per spazio
+            docker image prune -f

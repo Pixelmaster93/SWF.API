@@ -10,7 +10,7 @@ using ShitWithFriendAPI.Services.Impl;
 using ShitWithFriendAPI.Middleware;
 
 Log.Logger = new LoggerConfiguration()
-    .MinimumLevel.Warning()
+    .MinimumLevel.Information()
     .WriteTo.Console()
     .CreateLogger();
 
