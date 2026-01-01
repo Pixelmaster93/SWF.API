@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ShitWithFriendAPI.DBContext;
@@ -11,9 +12,11 @@ using ShitWithFriendAPI.DBContext;
 namespace ShitWithFriendAPI.Migrations
 {
     [DbContext(typeof(SWFContext))]
-    partial class SWFContextModelSnapshot : ModelSnapshot
+    [Migration("20260101133500_IncreaseStringLimits")]
+    partial class IncreaseStringLimits
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

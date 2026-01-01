@@ -9,7 +9,7 @@ namespace ShitWithFriendAPI.Entities
         public Guid Id { get; set; }
         public string Password { get; set; }
 
-        [Required, MaxLength(25)]
+        [Required]
         public string Name { get; set; }
         public User User { get; set; }
 

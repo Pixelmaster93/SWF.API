@@ -10,7 +10,7 @@ namespace ShitWithFriendAPI.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid Id { get; set; } = new Guid();
-        [Required, MaxLength(15), NotNull]
+        [Required, NotNull]
         public string Username { get; set; }
         public string Email { get; set; }
         public string Avatar { get; set; } = "DEFAULT_1";
