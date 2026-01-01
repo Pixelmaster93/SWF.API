@@ -88,9 +88,9 @@ namespace ShitWithFriendAPI.Services.Impl
             return _mapper.ProjectTo<PoopDto>(poops);
         }
 
-        public IQueryable<PoopDto> GetPoopsFromVariables(int pageNumber, int pageSize, Guid? userId, DateTime? dateFrom, DateTime? dateTo)
+        public IQueryable<PoopDto> GetPoopsFromVariables(int pageNumber, int pageSize, Guid? userId, DateTime? dateFrom, DateTime? dateTo, Guid? groupId = null)
         {
-            var poops = _poopRepository.GetPoopsFromVariables(pageNumber, pageSize, userId, dateFrom, dateTo);
+            var poops = _poopRepository.GetPoopsFromVariables(pageNumber, pageSize, userId, dateFrom, dateTo, groupId);
             return _mapper.ProjectTo<PoopDto>(poops);
         }
     }

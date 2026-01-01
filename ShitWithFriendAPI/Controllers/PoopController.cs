@@ -26,10 +26,10 @@ namespace ShitWithFriendAPI.Controllers
         }
 
         [HttpGet("filter")]
-        public ActionResult<IEnumerable<PoopDto>> GetPoopsFromVariables([FromQuery] int pageNumber = 0, [FromQuery] int pageSize = 10, [FromQuery] Guid? userId = null, [FromQuery] DateTime? dateFrom = null, [FromQuery] DateTime? dateTo = null)
+        public ActionResult<IEnumerable<PoopDto>> GetPoopsFromVariables([FromQuery] int pageNumber = 0, [FromQuery] int pageSize = 10, [FromQuery] Guid? userId = null, [FromQuery] DateTime? dateFrom = null, [FromQuery] DateTime? dateTo = null, [FromQuery] Guid? groupId = null)
         {
             if (pageNumber < 0) pageNumber = 0;
-            var poops = _poopService.GetPoopsFromVariables(pageNumber, pageSize, userId, dateFrom, dateTo);
+            var poops = _poopService.GetPoopsFromVariables(pageNumber, pageSize, userId, dateFrom, dateTo, groupId);
             return Ok(poops);
         }
 

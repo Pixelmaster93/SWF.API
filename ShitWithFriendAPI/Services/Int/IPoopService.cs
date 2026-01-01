@@ -5,7 +5,7 @@ namespace ShitWithFriendAPI.Services.Int
     public interface IPoopService
     {
         IQueryable<PoopDto> GetPoops(int pageNumber, int pageSize);
-        IQueryable<PoopDto> GetPoopsFromVariables(int pageNumber, int pageSize, Guid? userId, DateTime? dateFrom, DateTime? dateTo);
+        IQueryable<PoopDto> GetPoopsFromVariables(int pageNumber, int pageSize, Guid? userId, DateTime? dateFrom, DateTime? dateTo, Guid? groupId = null);
         PoopDto GetPoopById(Guid id);
         PoopDto CreatePoop(CreatePoopRequestDto createPoopRequestDto);
         void DeletePoop(Guid id);
