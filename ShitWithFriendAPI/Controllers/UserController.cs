@@ -68,7 +68,8 @@ namespace ShitWithFriendAPI.Controllers
         public ActionResult UpdateAvatar([FromBody] UpdateAvatarRequestDto request)
         {
             // Ottieni UserId dal token
-            var userIdString = User.FindFirst("id")?.Value;
+            var userIdString = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value
+                               ?? User.FindFirst("sub")?.Value;
             if (!Guid.TryParse(userIdString, out var userId)) return Unauthorized();
 
             // Verifica ownership: è un achievement sbloccato O è di base?
@@ -81,7 +82,7 @@ namespace ShitWithFriendAPI.Controllers
             // Ma POOP_1 è starter.
             // Controllo: se code è "POOP_1" ok. Altrimenti check repo.
             
-            bool isBase = request.AvatarCode == "POOP_1";
+            bool isBase = request.AvatarCode == "DEFAULT_1";
             bool hasUnlock = _userAchievementRepository.HasUnlock(userId, request.AvatarCode);
 
             if (!isBase && !hasUnlock)
